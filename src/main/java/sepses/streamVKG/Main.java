@@ -1,6 +1,7 @@
 package sepses.streamVKG;
 
 
+
 import it.polimi.sr.rsp.csparql.engine.CSPARQLEngine;
 import it.polimi.sr.rsp.csparql.sysout.GenericResponseSysOutFormatter;
 import it.polimi.yasper.core.engine.config.EngineConfiguration;

@@ -63,17 +63,29 @@
  <properties>
         <jena.version>3.14.0</jena.version>
     </properties>
+    <repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+	
 <dependencies>
-        <dependency>
+    <dependency>
+	    <groupId>com.github.riccardotommasini</groupId>
+	    <artifactId>csparql2</artifactId>
+	    <version>2.3.1</version>
+	</dependency>
+         <dependency>
             <groupId>it.polimi.deib.sr.rsp.csparql</groupId>
             <artifactId>jasper</artifactId>
             <version>2.0.0</version>
         </dependency>
-        <dependency>
+      <!-- <dependency>
             <groupId>it.polimi.deib.sr.rsp.csparql</groupId>
             <artifactId>dsms</artifactId>
             <version>2.0.0</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-core</artifactId>
