@@ -1,9 +1,11 @@
 package sepses.streamVKG.stream;
 
-import it.polimi.yasper.core.stream.data.DataStreamImpl;
+//import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.graph.Graph;
 import org.apache.jena.rdf.model.*;
+
+import it.polimi.yasper.core.stream.data.DataStreamImpl;
 
 import java.net.*;
 import java.io.*;
