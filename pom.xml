@@ -77,7 +77,7 @@
 	    <version>2.3.1</version>
 	</dependency>
          <dependency>
-            <groupId>it.polimi.deib.sr.rsp.csparql</groupId>
+            <groupId>com.github.riccardotommasini.yasper</groupId>
             <artifactId>jasper</artifactId>
             <version>2.0.0</version>
         </dependency>
