@@ -30,7 +30,13 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
 
-
+    	 // examples name
+        final int WHO_LIKES_WHAT = 1;
+        final int MULTI_STREAM = 2;
+        
+        // put here the example you want to run
+        int key = MULTI_STREAM;
+    	
         String path = Main.class.getResource("/csparql.properties").getPath();
         SDSConfiguration config = new SDSConfiguration(path);
         EngineConfiguration ec = EngineConfiguration.loadConfig("/csparql.properties");
@@ -42,24 +48,52 @@ public class Main {
 
         sr = new CSPARQLEngine(0, ec);
 
-
+        switch (key) {
+        case WHO_LIKES_WHAT:
                 System.out.println("WHO_LIKES_WHAT example");
 
                 writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 6666);
                 register = sr.register(writer);
                 writer.setWritable(register);
 
-        cqe = sr.register(getQuery("rtgp-q2", ".rspql"), config);
+                cqe = sr.register(getQuery("rtgp-q2", ".rspql"), config);
                 q = cqe.getContinuousQuery();
                 cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
 
+		        System.out.println(q.toString());
+		        System.out.println("<<------>>");
+		        (new Thread(writer)).start();
+		        break;
+        
+        case MULTI_STREAM:
+	        	 writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 6666);
+	             register = sr.register(writer);
+	             writer.setWritable(register);
+	             
+	             TcpSocketStream writer2 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream3", 6667);
+	             DataStreamImpl<Graph> register2 = sr.register(writer2);
+	             writer2.setWritable(register2);
 
+                TcpSocketStream writer3 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream4", 6668);
+                DataStreamImpl<Graph> register3 = sr.register(writer3);
+                writer3.setWritable(register3);
+	
+	             cqe = sr.register(getQuery("rtgp-q3", ".rspql"), config);
+	             q = cqe.getContinuousQuery();
+	             cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
 
-
-        System.out.println(q.toString());
-        System.out.println("<<------>>");
-        (new Thread(writer)).start();
-
+			        System.out.println(q.toString());
+			        System.out.println("<<------>>");
+			        (new Thread(writer)).start();
+			        (new Thread(writer2)).start();
+                    (new Thread(writer3)).start();
+			        break;
+			        
+			        default:
+			        	System.exit(0);
+			        	break;
+        }
+        
     }
 
     public static String getQuery(String queryName, String suffix) throws IOException {
