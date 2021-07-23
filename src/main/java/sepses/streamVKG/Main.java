@@ -49,7 +49,7 @@ public class Main {
         sr = new CSPARQLEngine(0, ec);
 
         switch (key) {
-        case WHO_LIKES_WHAT:
+        case SINGLE_STREAM:
                 System.out.println("WHO_LIKES_WHAT example");
 
                 writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
