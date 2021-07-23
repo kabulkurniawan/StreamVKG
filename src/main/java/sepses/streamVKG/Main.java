@@ -52,7 +52,7 @@ public class Main {
         case WHO_LIKES_WHAT:
                 System.out.println("WHO_LIKES_WHAT example");
 
-                writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 6666);
+                writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
                 register = sr.register(writer);
                 writer.setWritable(register);
 
@@ -66,15 +66,15 @@ public class Main {
 		        break;
         
         case MULTI_STREAM:
-	        	 writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 6666);
+	        	 writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
 	             register = sr.register(writer);
 	             writer.setWritable(register);
 	             
-	             TcpSocketStream writer2 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream3", 6667);
+	             TcpSocketStream writer2 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream3", 7771);
 	             DataStreamImpl<Graph> register2 = sr.register(writer2);
 	             writer2.setWritable(register2);
 
-                TcpSocketStream writer3 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream4", 6668);
+                TcpSocketStream writer3 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream4", 7772);
                 DataStreamImpl<Graph> register3 = sr.register(writer3);
                 writer3.setWritable(register3);
 	
