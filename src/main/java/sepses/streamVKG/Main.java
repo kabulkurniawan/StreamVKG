@@ -31,11 +31,11 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
 
     	 // examples name
-        final int WHO_LIKES_WHAT = 1;
+        final int SINGLE_STREAM = 1;
         final int MULTI_STREAM = 2;
         
         // put here the example you want to run
-        int key = MULTI_STREAM;
+        int key = SINGLE_STREAM;
     	
         String path = Main.class.getResource("/csparql.properties").getPath();
         SDSConfiguration config = new SDSConfiguration(path);

@@ -1,14 +1,15 @@
-#HOW_MANY_USERS_LIKE_THE_SAME_OBJ
+#SINGLE_STREAM
 
-PREFIX ex: <http://ex.org/t#>
+PREFIX cl: <https://w3id.org/sepses/vocab/log/core#>
+PREFIX apache: <https://w3id.org/sepses/vocab/log/apache#>
 
 REGISTER RSTREAM <s1> AS
-#SELECT  ?s
-SELECT  (count(?s) as ?countUsers)
+SELECT ?s ?timestamp 
+#SELECT  (count(?s) as ?countUsers)
 FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT2S STEP PT1S]
 WHERE  {
     WINDOW ?w {
-		?s ex:message ?o.
+	?s   cl:timestamp   ?timestamp.
 		}
 	}
-ORDER BY ASC(?s)
+#ORDER BY ASC(?s)
