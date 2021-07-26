@@ -18,6 +18,8 @@ import org.apache.jena.graph.Graph;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -30,6 +32,9 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
 
+    	//target host
+    	final String host1= "localhost";
+    	
     	 // examples name
         final int SINGLE_STREAM = 1;
         final int MULTI_STREAM = 2;
@@ -60,7 +65,9 @@ public class Main {
                 q = cqe.getContinuousQuery();
                 cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
 
+               
 		        System.out.println(q.toString());
+		        sendRequest(q.toString(), host1);
 		        System.out.println("<<------>>");
 		        (new Thread(writer)).start();
 		        break;
@@ -101,6 +108,20 @@ public class Main {
         System.out.println(resource.getPath());
         File file = new File(resource.getPath());
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
+    }
+    
+    public static void sendRequest(String sparql, String host) throws MalformedURLException {
+    	URL url;
+    	HttpURLConnection con;
+		try {
+			url = new URL(host+"/startservice?query="+sparql);
+			con = (HttpURLConnection) url.openConnection();
+			con.setRequestMethod("GET");
+			con.setDoOutput(true);
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+    	
     }
 
 }
