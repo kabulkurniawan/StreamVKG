@@ -55,22 +55,20 @@ public class Main {
 
         switch (key) {
         case SINGLE_STREAM:
-                System.out.println("WHO_LIKES_WHAT example");
+        	 System.out.println("WHO_LIKES_WHAT example");
 
-                writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
-                register = sr.register(writer);
-                writer.setWritable(register);
+             writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
+             register = sr.register(writer);
+             writer.setWritable(register);
 
-                cqe = sr.register(getQuery("rtgp-q2", ".rspql"), config);
-                q = cqe.getContinuousQuery();
-                cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
-
-               
-		        System.out.println(q.toString());
-		        sendRequest(q.toString(), host1);
-		        System.out.println("<<------>>");
-		        (new Thread(writer)).start();
-		        break;
+             cqe = sr.register(getQuery("rtgp-q2", ".rspql"), config);
+             q = cqe.getContinuousQuery();
+             cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
+             String pq = preparseCsparqlQuery(q.toString());
+		     System.out.println("<<------>>");
+		      (new Thread(writer)).start();
+             sendRequest(pq,host1);
+		      break;
         
         case MULTI_STREAM:
 	        	 writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
@@ -103,14 +101,14 @@ public class Main {
         
     }
 
-    public static String getQuery(String queryName, String suffix) throws IOException {
+    private static String getQuery(String queryName, String suffix) throws IOException {
         URL resource = Main.class.getResource("/" + queryName + suffix);
         System.out.println(resource.getPath());
         File file = new File(resource.getPath());
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
     }
     
-    public static void sendRequest(String sparql, String host) throws MalformedURLException {
+    private static void sendRequest(String sparql, String host) throws MalformedURLException {
     	URL url;
     	HttpURLConnection con;
 		try {
@@ -123,5 +121,10 @@ public class Main {
         }
     	
     }
+    
+    private static String preparseCsparqlQuery(String q){
+        String pq =q.replaceAll("<win","<http://win");
+       return pq;
+   }
 
 }
