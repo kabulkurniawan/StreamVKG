@@ -8,7 +8,7 @@ REGISTER RSTREAM <s1> AS
 SELECT ?s ?timestamp 
 FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT3S STEP PT2S]
 FROM NAMED WINDOW <win3> ON <stream3> [RANGE PT3S STEP PT2S]
-FROM NAMED WINDOW <win4> ON <stream3> [RANGE PT3S STEP PT2S]
+FROM NAMED WINDOW <win4> ON <stream4> [RANGE PT3S STEP PT2S]
 WHERE  {
     WINDOW ?w {
           ?s   cl:timestamp   ?timestamp.
