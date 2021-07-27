@@ -18,9 +18,12 @@ import org.apache.jena.graph.Graph;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -33,7 +36,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
 
     	//target host
-    	final String host1= "localhost";
+    	final String host1= "http://localhost:8080";
     	
     	 // examples name
         final int SINGLE_STREAM = 1;
@@ -108,20 +111,22 @@ public class Main {
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
     }
     
-    private static void sendRequest(String sparql, String host) throws MalformedURLException {
+    private static void sendRequest(String sparql, String host) throws MalformedURLException, UnsupportedEncodingException {
     	URL url;
     	HttpURLConnection con;
+        String param = URLEncoder.encode(sparql, StandardCharsets.UTF_8.toString());
+
 		try {
-			url = new URL(host+"/startservice?query="+sparql);
+			url = new URL(host+"/startservice?query="+param);
+            System.out.println(url);
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestMethod("GET");
-			con.setDoOutput(true);
+            InputStream responseStream = con.getInputStream();
 		} catch (Exception e) {
             e.printStackTrace();
         }
     	
     }
-    
     private static String preparseCsparqlQuery(String q){
         String pq =q.replaceAll("<win","<http://win");
        return pq;
