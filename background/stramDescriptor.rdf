@@ -1,0 +1,47 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix frmt: <http://www.w3.org/ns/formats/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix sys: <https://w3id.org/sepses/sys#> .
+@prefix vocals: <https://w3id.org/rsp/vocals#> .
+@prefix vsd: <https://w3id.org/rsp/vocals-sd#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <https://example.org> .
+
+:stream1 a vocals:StreamDescriptor,
+        vsd:CatalogService ;
+        dcat:dataset :logSource1 .
+
+:logSource1  a vocals:RDFStream ;
+    dct:title "Stream log from web server 1" ;
+    prov:wasGeneratedBy :web-serv1 ;
+    vocals:hasEndpoint  :logStream1Ep .
+
+:logStream1Ep a vocals:StreamEndpoint ;
+    dct:format frmt:TURTLE ;
+    dcat:accessURL "http://10.10.20.4:8080" .
+
+:web-serv1 a sys:Host;
+           rdfs:Label "WebServer1";
+           sys:IP4Address "10.10.20.4";
+           sys:hostTyp sys:WebServer.
+
+
+:stream2 a vocals:StreamDescriptor,
+        vsd:CatalogService ;
+        dcat:dataset :logSource2 .
+
+:logSource2  a vocals:RDFStream ;
+    dct:title "Stream log from file server 1" ;
+    prov:wasGeneratedBy :file-serv1 ;
+    vocals:hasEndpoint  :logStream2Ep .
+
+:logStream2Ep a vocals:StreamEndpoint ;
+    dct:format frmt:TURTLE ;
+    dcat:accessURL "http://10.10.20.5:8080" .
+
+:file-serv1 a sys:Host;
+           rdfs:Label "WebServer1";
+           sys:IP4Address "10.10.20.5";
+           sys:hostTyp sys:FileServer.
+

@@ -1,15 +1,23 @@
 #SINGLE_STREAM
 
 PREFIX cl: <https://w3id.org/sepses/vocab/log/core#>
-PREFIX apache: <https://w3id.org/sepses/vocab/log/apache#>
+PREFIX auth: <https://w3id.org/sepses/vocab/log/auth#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 REGISTER RSTREAM <s1> AS
-SELECT ?s ?timestamp 
-#SELECT  (count(?s) as ?countUsers)
+SELECT ?s ?lf ?labl
+#SELECT  (count(?s) as ?countLog)
+FROM <http://localhost:8082/dbpedia-example.ttl>
 FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT2S STEP PT1S]
 WHERE  {
-    WINDOW ?w {
-	?s   cl:timestamp   ?timestamp.
-		}
-	}
+   ?lf  rdfs:label  ?labl.
+    WINDOW ?w  {
+    # ?s   cl:message   ?message.
+    # ?s   cl:timestamp   ?timestamp.
+	 ?s   cl:hasLogFamily ?lf.
+   	}
+  }
 #ORDER BY ASC(?s)
+
