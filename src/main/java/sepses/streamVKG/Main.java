@@ -40,10 +40,16 @@ public class Main {
         // put here the example you want to run
         int key = SINGLE_STREAM;
 
-        String path = Main.class.getResource("/csparql.properties").getPath();
-        SDSConfiguration config = new SDSConfiguration(path);
-        EngineConfiguration ec = EngineConfiguration.loadConfig("/csparql.properties");
-
+//        InputStream is = Main.class.getResourceAsStream("/csparql.properties");
+//       PropertiesConfiguration conf = new PropertiesConfiguration();
+//       conf.load(path);
+//        System.out.println(ConfigurationUtils.toString(conf));
+//        System.exit(0);
+        SDSConfiguration config = new SDSConfiguration("csparql.properties");
+        EngineConfiguration ec = new EngineConfiguration("csparql.properties");
+//        System.out.println(ec);
+//        System.out.println(conf);
+//        System.exit(0);
         ContinuousQuery q;
         ContinuousQueryExecution cqe;
         TcpSocketStream writer;
@@ -60,17 +66,18 @@ public class Main {
                 register = sr.register(writer);
                 writer.setWritable(register);
 
-                cqe = sr.register(getQuery("rtgp-q2", ".rspql"), config);
+                cqe = sr.register(getQuery("rtgp-q1", ".rspql"), config);
                 q = cqe.getContinuousQuery();
                 cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
 
                 //call host
-                sc = new StreamCall(q.toString(),host1);
+                //sc = new StreamCall(q.toString(),host1);
                 System.out.println("<<------>>");
                 (new Thread(writer)).start();
-                (new Thread(sc)).start();
+                //(new Thread(sc)).start();
 
                 break;
+
 
             case MULTI_STREAM:
 
@@ -128,9 +135,9 @@ public class Main {
     }
 
     public static String getQuery(String queryName, String suffix) throws IOException {
-        URL resource = Main.class.getResource("/" + queryName + suffix);
-        System.out.println(resource.getPath());
-        File file = new File(resource.getPath());
+        //URL resource = Main.class.getResource("/" + queryName + suffix);
+        //System.out.println(resource.getPath());
+        File file = new File(queryName + suffix);
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
     }
 

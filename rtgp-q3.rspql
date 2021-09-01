@@ -1,4 +1,4 @@
-#SINGLE_STREAM
+#MULTI STREAM
 
 PREFIX cl: <https://w3id.org/sepses/vocab/log/core#>
 PREFIX auth: <https://w3id.org/sepses/vocab/log/auth#>
@@ -6,18 +6,21 @@ PREFIX dbo: <http://dbpedia.org/ontology/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
+
 REGISTER RSTREAM <s1> AS
-SELECT ?s ?lf ?labl
+SELECT ?pn ?lf ?labl
 #SELECT  (count(?s) as ?countLog)
-FROM <http://localhost:8082/dbpedia-example.ttl>
-FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT2S STEP PT1S]
+#FROM <http://localhost:8082/dbpedia-example.ttl>
+FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT3S STEP PT2S]
+FROM NAMED WINDOW <win3> ON <stream3> [RANGE PT3S STEP PT2S]
+#FROM NAMED WINDOW <win4> ON <stream4> [RANGE PT3S STEP PT2S]
 WHERE  {
    ?lf  rdfs:label  ?labl.
     WINDOW ?w  {
-    # ?s   cl:message   ?message.
+     ?s   auth:programName   ?pn.
     # ?s   cl:timestamp   ?timestamp.
 	 ?s   cl:hasLogFamily ?lf.
+	 FILTER regex(str(?pn),"auth")
    	}
   }
 #ORDER BY ASC(?s)
-
