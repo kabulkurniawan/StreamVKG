@@ -8,6 +8,7 @@ import it.polimi.yasper.core.querying.ContinuousQuery;
 import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
+import org.apache.jena.query.ARQ;
 import sepses.streamVKG.stream.StreamCall;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
@@ -26,6 +27,7 @@ public class Main {
     static CSPARQLEngine sr;
 
     public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
+        ARQ.init();
 
         //target host
         final String host1= "http://localhost:8080";
