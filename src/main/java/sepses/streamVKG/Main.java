@@ -9,14 +9,12 @@ import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import org.apache.jena.query.ARQ;
-import sepses.streamVKG.stream.StreamCall;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Graph;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -28,111 +26,20 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
         ARQ.init();
-
-        //target host
-        final String host1= "http://localhost:8080";
-        final String host2= "http://10.10.20.5:8080";
-        final String host3= "http://10.10.30.8:8080";
-        //final String host4= "http://10.10.30.7:8080";
-
-        // examples name
-        final int SINGLE_STREAM = 1;
-        final int MULTI_STREAM = 2;
-
-        // put here the example you want to run
-        int key = SINGLE_STREAM;
-
-//        InputStream is = Main.class.getResourceAsStream("/csparql.properties");
-//       PropertiesConfiguration conf = new PropertiesConfiguration();
-//       conf.load(path);
-//        System.out.println(ConfigurationUtils.toString(conf));
-//        System.exit(0);
-        SDSConfiguration config = new SDSConfiguration("csparql.properties");
         EngineConfiguration ec = new EngineConfiguration("csparql.properties");
-//        System.out.println(ec);
-//        System.out.println(conf);
-//        System.exit(0);
-        ContinuousQuery q;
-        ContinuousQueryExecution cqe;
-        TcpSocketStream writer;
-        StreamCall sc;
-        DataStreamImpl<Graph> register;
-
         sr = new CSPARQLEngine(0, ec);
+        SDSConfiguration config = new SDSConfiguration("csparql.properties");
 
-        switch (key) {
-            case SINGLE_STREAM:
-                System.out.println("SINGLE STREAM");
+        //register streams
+        registerStream(sr,"http://streamreasoning.org/csparql/streams/stream2",7770);
+        registerStream(sr,"http://streamreasoning.org/csparql/streams/stream3",7771);
+        registerStream(sr,"http://streamreasoning.org/csparql/streams/stream4",7772);
+        registerStream(sr,"http://streamreasoning.org/csparql/streams/stream5",7773);
 
-                writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
-                register = sr.register(writer);
-                writer.setWritable(register);
+        //register queries
+        registerQuery(sr, config, "rtgp-q1",".rspql");
+        registerQuery(sr, config, "rtgp-q2",".rspql");
 
-                cqe = sr.register(getQuery("rtgp-q1", ".rspql"), config);
-                q = cqe.getContinuousQuery();
-                cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
-
-                //call host
-                //sc = new StreamCall(q.toString(),host1);
-                System.out.println("<<------>>");
-                (new Thread(writer)).start();
-                //(new Thread(sc)).start();
-
-                break;
-
-
-            case MULTI_STREAM:
-
-                System.out.println("MULTI STREAM");
-                //host1
-                writer = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream2", 7770);
-                register = sr.register(writer);
-                writer.setWritable(register);
-
-                //host2
-                TcpSocketStream writer2 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream3", 7771);
-                DataStreamImpl<Graph> register2 = sr.register(writer2);
-                writer2.setWritable(register2);
-
-                //host3
-                TcpSocketStream writer3 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream4", 7772);
-                DataStreamImpl<Graph> register3 = sr.register(writer3);
-                writer3.setWritable(register3);
-
-                //host4
-                //TcpSocketStream writer4 = new TcpSocketStream("Writer", "http://streamreasoning.org/csparql/streams/stream5", 7773);
-                //DataStreamImpl<Graph> register4 = sr.register(writer4);
-                //writer3.setWritable(register4);
-
-                cqe = sr.register(getQuery("rtgp-q3", ".rspql"), config);
-                q = cqe.getContinuousQuery();
-                cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
-
-                //call host
-
-                sc = new StreamCall(q.toString(),host1);
-                StreamCall sc2 = new StreamCall(q.toString(),host2);
-                StreamCall sc3 = new StreamCall(q.toString(),host3);
-                //StreamCall sc4 = new StreamCall(q.toString(),host4);
-
-
-                System.out.println("<<------>>");
-                (new Thread(writer)).start();
-                (new Thread(sc)).start();
-               // (new Thread(writer2)).start();
-               // (new Thread(sc2)).start();
-               // (new Thread(writer3)).start();
-               // (new Thread(sc3)).start();
-                //(new Thread(writer4)).start();
-                //(new Thread(sc4)).start();
-
-
-                break;
-
-            default:
-                System.exit(0);
-                break;
-        }
 
     }
 
@@ -143,6 +50,22 @@ public class Main {
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
     }
 
+    public static void registerStream(CSPARQLEngine sr, String stream, int port){
+        TcpSocketStream writer;
+        DataStreamImpl<Graph> register;
 
+        writer = new TcpSocketStream("Writer", stream, port);
+        register = sr.register(writer);
+        writer.setWritable(register);
+        (new Thread(writer)).start();
+    }
+
+    public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
+        ContinuousQuery q;
+        ContinuousQueryExecution cqe;
+        cqe = sr.register(getQuery(queryName, suffix), config);
+        q = cqe.getContinuousQuery();
+        cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
+    }
 
 }
