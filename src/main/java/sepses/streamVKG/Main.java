@@ -38,14 +38,13 @@ public class Main {
 
         //register queries
         registerQuery(sr, config, "rtgp-q1",".rspql");
-        registerQuery(sr, config, "rtgp-q2",".rspql");
+        //registerQuery(sr, config, "rtgp-q2",".rspql");
+        //registerQuery(sr, config, "rtgp-q3",".rspql");
 
 
     }
 
     public static String getQuery(String queryName, String suffix) throws IOException {
-        //URL resource = Main.class.getResource("/" + queryName + suffix);
-        //System.out.println(resource.getPath());
         File file = new File(queryName + suffix);
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
     }
