@@ -77,7 +77,7 @@ public class Main {
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
-        return cqe.outstream();
+        return q.getOutputStream();
     }
 
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
