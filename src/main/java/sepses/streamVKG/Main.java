@@ -77,7 +77,6 @@ public class Main {
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
-        cqe.ad
         //send to another rsp
         Socket cs = new Socket("localhost",8880);
 
