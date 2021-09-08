@@ -72,10 +72,8 @@ public class Main {
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
-
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
-        System.out.println(q.getOutputStream());
-        return q.getOutputStream();
+        return cqe.outstream();
 
     }
 
