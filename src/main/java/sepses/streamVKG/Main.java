@@ -3,12 +3,12 @@ package sepses.streamVKG;
 
 import it.polimi.sr.rsp.csparql.engine.CSPARQLEngine;
 import it.polimi.sr.rsp.csparql.sysout.ConstructSysOutDefaultFormatter;
-import it.polimi.sr.rsp.csparql.sysout.GenericResponseSysOutFormatter;
 import it.polimi.yasper.core.engine.config.EngineConfiguration;
 import it.polimi.yasper.core.querying.ContinuousQuery;
 import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
+import it.polimi.yasper.core.stream.web.WebStream;
 import org.apache.jena.query.ARQ;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
@@ -16,6 +16,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Graph;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -38,10 +40,13 @@ public class Main {
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream5",7773);
 
         //register queries
-        registerQuery(sr, config, "rtgp-q2",".rspql");
+        String out = registerQuery(sr, config, "rtgp-q2",".rspql");
         //registerQuery(sr, config, "rtgp-q1",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
+
+        //send to another rsp server
+        createTCPClient(out, "localhost",8880 );
 
 
     }
@@ -61,12 +66,20 @@ public class Main {
         (new Thread(writer)).start();
     }
 
-    public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
+    public static String registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
         ContinuousQuery q;
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
+
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
+        return q.getOutputStream().toString();
+    }
+
+    public static void createTCPClient(String ws, String host, int port) throws IOException {
+        Socket s = new Socket(host,port);
+        OutputStream output = s.getOutputStream();
+        output.write(ws.getBytes(StandardCharsets.UTF_8));
     }
 
 }
