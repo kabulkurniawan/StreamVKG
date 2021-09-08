@@ -8,6 +8,7 @@ import it.polimi.yasper.core.querying.ContinuousQuery;
 import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
+import it.polimi.yasper.core.stream.data.WebDataStream;
 import it.polimi.yasper.core.stream.web.WebStream;
 import org.apache.jena.query.ARQ;
 import sepses.streamVKG.stream.TcpClientSocketStream;
@@ -78,13 +79,12 @@ public class Main {
 
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
         //send to another rsp
-        System.out.println("ada lhooooo =>"+cqe.outstream());
-
+        WebDataStream ou = cqe.outstream();
 
         Socket cs = new Socket("localhost",8880);
 
         PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
-        writer.println(cqe.outstream());
+        ou.addConsumer((o, l) -> writer.println(o));
 
     }
 
