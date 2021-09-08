@@ -41,7 +41,7 @@ public class Main {
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream5",7773);
 
         //register queries
-        String out = registerQuery(sr, config, "rtgp-q2",".rspql");
+        WebStream out = registerQuery(sr, config, "rtgp-q2",".rspql");
         //registerQuery(sr, config, "rtgp-q1",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
@@ -67,20 +67,21 @@ public class Main {
         (new Thread(writer)).start();
     }
 
-    public static String registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
+    public static WebStream registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
         ContinuousQuery q;
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
 
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
-        return q.getOutputStream().toString();
+
+        return q.getOutputStream();
     }
 
-    public static void createTCPClient(String ws, String host, int port) throws IOException {
+    public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
         Socket s = new Socket(host,port);
         OutputStream output = s.getOutputStream();
-        output.write(ws.getBytes(StandardCharsets.UTF_8));
+        output.write(ws.toString().getBytes(StandardCharsets.UTF_8));
         PrintWriter writer = new PrintWriter(output, true);
         writer.println("This is a message sent to the server");
     }
