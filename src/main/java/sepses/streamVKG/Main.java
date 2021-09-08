@@ -82,7 +82,7 @@ public class Main {
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
         Socket s = new Socket(host,port);
         OutputStream output = s.getOutputStream();
-        output.write(ws);
+        output.write(ws.toString().getBytes(StandardCharsets.UTF_8));
         PrintWriter writer = new PrintWriter(output, true);
         writer.println("This is a message sent to the server");
     }
