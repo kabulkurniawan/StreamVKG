@@ -75,13 +75,15 @@ public class Main {
         ContinuousQuery q;
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
-        q = cqe.getContinuousQuery();
+
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
         //send to another rsp
+
+
         Socket cs = new Socket("localhost",8880);
 
         PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
-        writer.println("send data to server");
+        writer.println(cqe.outstream());
 
     }
 
