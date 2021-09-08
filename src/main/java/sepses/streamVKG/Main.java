@@ -17,6 +17,7 @@ import org.apache.jena.graph.Graph;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
@@ -80,6 +81,8 @@ public class Main {
         Socket s = new Socket(host,port);
         OutputStream output = s.getOutputStream();
         output.write(ws.getBytes(StandardCharsets.UTF_8));
+        PrintWriter writer = new PrintWriter(output, true);
+        writer.println("This is a message sent to the server");
     }
 
 }
