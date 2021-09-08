@@ -2,6 +2,7 @@ package sepses.streamVKG;
 
 
 import it.polimi.sr.rsp.csparql.engine.CSPARQLEngine;
+import it.polimi.sr.rsp.csparql.sysout.ConstructSysOutDefaultFormatter;
 import it.polimi.sr.rsp.csparql.sysout.GenericResponseSysOutFormatter;
 import it.polimi.yasper.core.engine.config.EngineConfiguration;
 import it.polimi.yasper.core.querying.ContinuousQuery;
@@ -65,7 +66,7 @@ public class Main {
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
-        cqe.add(new GenericResponseSysOutFormatter("TABLE", true));
+        cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
     }
 
 }
