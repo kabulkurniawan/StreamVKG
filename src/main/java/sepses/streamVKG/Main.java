@@ -77,12 +77,13 @@ public class Main {
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
+        cqe.ad
         //send to another rsp
         Socket cs = new Socket("localhost",8880);
 
         PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
         writer.println("send data to server");
-        writer.println(q.getOutputStream().toString());
+
     }
 
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
