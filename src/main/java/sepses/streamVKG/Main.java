@@ -32,6 +32,7 @@ public class Main {
         ARQ.init();
         EngineConfiguration ec = new EngineConfiguration("csparql.properties");
         sr = new CSPARQLEngine(0, ec);
+
         SDSConfiguration config = new SDSConfiguration("csparql.properties");
 
         //register streams
@@ -45,6 +46,8 @@ public class Main {
         //registerQuery(sr, config, "rtgp-q1",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
+
+
 
         //send to another rsp server
         createTCPClient(out, "localhost",8880 );
@@ -74,15 +77,13 @@ public class Main {
         q = cqe.getContinuousQuery();
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
         return cqe.outstream();
-
     }
 
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
         Socket s = new Socket(host,port);
         OutputStream output = s.getOutputStream();
-        output.write(ws.toString().getBytes(StandardCharsets.UTF_8));
         PrintWriter writer = new PrintWriter(output, true);
-        writer.println("This is a message sent to the server");
+        writer.println(ws);
     }
 
 }
