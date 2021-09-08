@@ -43,7 +43,7 @@ public class Main {
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream5",7773);
 
         //register queries
-        WebStream out = registerQuery(sr, config, "rtgp-q2",".rspql");
+        registerQuery(sr, config, "rtgp-q2",".rspql");
         //registerQuery(sr, config, "rtgp-q1",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
@@ -51,7 +51,7 @@ public class Main {
 
 
         //send to another rsp server
-        createTCPClient(out, "localhost",8880 );
+        //createTCPClient(out, "localhost",8880 );
 
 
     }
@@ -71,13 +71,17 @@ public class Main {
         (new Thread(writer)).start();
     }
 
-    public static WebStream registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
+    public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
         ContinuousQuery q;
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
         q = cqe.getContinuousQuery();
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
-        return q.getOutputStream();
+        //send to another rsp
+        Socket s = new Socket("localhost",8880);
+        OutputStream output = s.getOutputStream();
+        PrintWriter writer = new PrintWriter(output, true);
+        writer.println(q.getOutputStream());
     }
 
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
