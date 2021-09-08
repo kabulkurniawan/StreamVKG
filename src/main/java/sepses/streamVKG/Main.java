@@ -72,12 +72,13 @@ public class Main {
     }
 
     public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
-        ContinuousQuery q;
+
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
 
         cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
         //send to another rsp
+        System.out.println("ada lhooooo =>"+cqe.outstream());
 
 
         Socket cs = new Socket("localhost",8880);
