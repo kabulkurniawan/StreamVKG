@@ -10,6 +10,7 @@ import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import it.polimi.yasper.core.stream.web.WebStream;
 import org.apache.jena.query.ARQ;
+import sepses.streamVKG.stream.TcpClientSocketStream;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.FileUtils;
@@ -80,10 +81,8 @@ public class Main {
     }
 
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
-        Socket s = new Socket(host,port);
-        OutputStream output = s.getOutputStream();
-        PrintWriter writer = new PrintWriter(output, true);
-        writer.println(ws);
+        TcpClientSocketStream s = new TcpClientSocketStream(ws, host,port);
+        (new Thread(s)).start();
     }
 
 }
