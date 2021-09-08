@@ -82,7 +82,7 @@ public class Main {
 
         PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
         writer.println("send data to server");
-        writer.println(q.getOutputStream());
+        writer.println(q.getOutputStream().toString());
     }
 
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
