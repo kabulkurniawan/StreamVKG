@@ -95,8 +95,8 @@ public class Main {
     }
 
     public static TcpSocketStream createTcpServer(String stream, int port){
-        TcpSocketStream writer;
-        writer = new TcpSocketStream("Writer", stream, port);
+        TcpSocketStream writer = new TcpSocketStream("Writer", stream, port);
+        (new Thread(writer)).start();
         return writer;
     }
 }
