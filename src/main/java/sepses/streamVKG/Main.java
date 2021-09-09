@@ -46,27 +46,8 @@ public class Main {
         registerStream(sr,wr4);
 
         //register queries
-       registerQuery(sr, config, "rtgp-q1", ".rspql",wr);
+       registerQuery(sr, config, "rtgp-q2", ".rspql",wr);
 
-
-        //init engine for Query1
-        CSPARQLEngine sr2 = new CSPARQLEngine(0, ec);
-
-        //register streams
-        registerStream(sr2,wr1);
-        registerStream(sr2,wr2);
-        registerStream(sr2,wr3);
-        registerStream(sr2,wr4);
-
-        //register queries
-        registerQuery(sr2, config, "rtgp-q2",".rspql",wr);
-
-
-
-
-
-        //send to another rsp server
-        //createTCPClient(out, "localhost",8880 );
 
 
     }
