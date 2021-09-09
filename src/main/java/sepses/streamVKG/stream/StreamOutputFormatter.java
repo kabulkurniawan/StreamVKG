@@ -22,7 +22,7 @@ public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
 
         super(format, distinct);
         Socket cs = new Socket("localhost",8880);
-        PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
+        writer = new PrintWriter(cs.getOutputStream(),true);
     }
 
     @SneakyThrows
