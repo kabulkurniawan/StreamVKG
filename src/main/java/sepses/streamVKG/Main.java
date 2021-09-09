@@ -48,6 +48,18 @@ public class Main {
         //register queries
        registerQuery(sr, config, "rtgp-q2", ".rspql",wr);
 
+        //init engine for Query2
+        CSPARQLEngine sr2 = new CSPARQLEngine(0, ec);
+
+        //register streams2
+        registerStream(sr2,wr1);
+        registerStream(sr2,wr2);
+        registerStream(sr2,wr3);
+        registerStream(sr2,wr4);
+
+        //register queries2
+        registerQuery(sr2, config, "rtgp-q1", ".rspql",wr);
+
 
 
     }
