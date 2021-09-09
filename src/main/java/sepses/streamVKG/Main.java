@@ -42,7 +42,7 @@ public class Main {
 
         //register queries
        registerQuery(sr, config, "rtgp-q2", ".rspql",wr);
-        //registerQuery(sr, config, "rtgp-q1",".rspql");
+       registerQuery(sr, config, "rtgp-q1",".rspql",wr);
         // registerQuery(sr, config, "rtgp-q2",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
 
