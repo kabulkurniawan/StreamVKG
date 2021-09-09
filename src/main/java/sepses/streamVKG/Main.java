@@ -41,7 +41,7 @@ public class Main {
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream5",7773);
 
         //register queries
-       registerQuery(sr, config, "rtgp-q1", ".rspql",wr);
+       //registerQuery(sr, config, "rtgp-q1", ".rspql",wr);
        registerQuery(sr, config, "rtgp-q2",".rspql",wr);
         // registerQuery(sr, config, "rtgp-q2",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
