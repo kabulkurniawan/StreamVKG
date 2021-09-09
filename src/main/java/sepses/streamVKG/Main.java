@@ -11,6 +11,7 @@ import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import it.polimi.yasper.core.stream.data.WebDataStream;
 import it.polimi.yasper.core.stream.web.WebStream;
 import org.apache.jena.query.ARQ;
+import sepses.streamVKG.stream.StreamOutputFormatter;
 import sepses.streamVKG.stream.TcpClientSocketStream;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
@@ -75,17 +76,7 @@ public class Main {
     public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
-
-        //cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
-        //send to another rsp
-        WebDataStream ou = cqe.outstream();
-
-
-        Socket cs = new Socket("localhost",8880);
-
-        PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
-        ou.addConsumer((o, l) -> writer.println(o));
-
+        cqe.add(new StreamOutputFormatter("TURTLE", true));
     }
 
     public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
