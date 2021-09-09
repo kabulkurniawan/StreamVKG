@@ -1,14 +1,19 @@
-#Who Likes What
+#SINGLE_STREAM
 
-PREFIX ex: <http://www.streamreasoning/CSPARQLEngine/test#>
+PREFIX cl: <https://w3id.org/sepses/vocab/log/core#>
+PREFIX apa: <https://w3id.org/sepses/vocab/log/apache#>
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 REGISTER RSTREAM <s1> AS
-SELECT *
-FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT10S STEP PT10S]
+CONSTRUCT { ?s apa:hasRequest ?req }
+#FROM <http://localhost:8082/dbpedia-example.ttl>
+FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT2S STEP PT1S]
 WHERE  {
-    WINDOW ?w {
-        ?s ex:likes ?o ;
-           ex:timestamp ?t .
-    }
-}
-ORDER BY ?t
+    WINDOW ?w  {
+     ?s   apa:hasRequest   ?req.
+     ?s   cl:timestamp   ?timestamp.
+     #    ?s   cl:hasLogFamily ?lf.
+        }
+  }
