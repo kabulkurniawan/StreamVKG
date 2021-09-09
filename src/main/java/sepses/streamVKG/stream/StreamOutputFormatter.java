@@ -5,6 +5,7 @@ import it.polimi.sr.rsp.csparql.sysout.ConstructResponseDefaultFormatter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -15,18 +16,18 @@ import java.net.Socket;
 @Log4j
 
 public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
+    protected PrintWriter writer;
 
-    public StreamOutputFormatter(String format, boolean distinct) {
+    public StreamOutputFormatter(String format, boolean distinct) throws IOException {
+
         super(format, distinct);
+        Socket cs = new Socket("localhost",8880);
+        PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
     }
 
     @SneakyThrows
     @Override
     protected void out(String s) {
-
-        Socket cs = new Socket("localhost",8880);
-
-        PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
         writer.println(s);
     }
 }
