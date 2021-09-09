@@ -23,16 +23,14 @@ import java.nio.charset.StandardCharsets;
  */
 public class Main {
 
-    static CSPARQLEngine sr;
-
     public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
         ARQ.init();
         EngineConfiguration ec = new EngineConfiguration("csparql.properties");
-        sr = new CSPARQLEngine(0, ec);
-
         SDSConfiguration config = new SDSConfiguration("csparql.properties");
-
         PrintWriter wr = createTcpClient("localhost",8880);
+
+        //init engine for Query1
+        CSPARQLEngine sr = new CSPARQLEngine(0, ec);
 
         //register streams
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream2",7770);
@@ -41,10 +39,20 @@ public class Main {
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream5",7773);
 
         //register queries
-       //registerQuery(sr, config, "rtgp-q1", ".rspql",wr);
-       registerQuery(sr, config, "rtgp-q2",".rspql",wr);
-        // registerQuery(sr, config, "rtgp-q2",".rspql");
-        // registerQuery(sr, config, "rtgp-q2",".rspql");
+       registerQuery(sr, config, "rtgp-q1", ".rspql",wr);
+
+
+        //init engine for Query2
+        CSPARQLEngine sr2 = new CSPARQLEngine(0, ec);
+
+        //register streams
+        registerStream(sr2,"http://streamreasoning.org/csparql/streams/stream2",7770);
+        registerStream(sr2,"http://streamreasoning.org/csparql/streams/stream3",7771);
+        registerStream(sr2,"http://streamreasoning.org/csparql/streams/stream4",7772);
+        registerStream(sr2,"http://streamreasoning.org/csparql/streams/stream5",7773);
+
+        //register queries
+        registerQuery(sr2, config, "rtgp-q2",".rspql",wr);
 
 
 
@@ -70,8 +78,7 @@ public class Main {
     }
 
     public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix, PrintWriter wr) throws IOException, ConfigurationException {
-        ContinuousQueryExecution cqe;
-        cqe = sr.register(getQuery(queryName, suffix), config);
+        ContinuousQueryExecution cqe = sr.register(getQuery(queryName, suffix), config);
         cqe.add(new StreamOutputFormatter("TURTLE", true,wr));
     }
 
