@@ -2,24 +2,18 @@ package sepses.streamVKG;
 
 
 import it.polimi.sr.rsp.csparql.engine.CSPARQLEngine;
-import it.polimi.sr.rsp.csparql.sysout.ConstructSysOutDefaultFormatter;
 import it.polimi.yasper.core.engine.config.EngineConfiguration;
-import it.polimi.yasper.core.querying.ContinuousQuery;
 import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
-import it.polimi.yasper.core.stream.data.WebDataStream;
-import it.polimi.yasper.core.stream.web.WebStream;
 import org.apache.jena.query.ARQ;
 import sepses.streamVKG.stream.StreamOutputFormatter;
-import sepses.streamVKG.stream.TcpClientSocketStream;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Graph;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -38,6 +32,8 @@ public class Main {
 
         SDSConfiguration config = new SDSConfiguration("csparql.properties");
 
+        PrintWriter wr = createTcpClient("localhost",8880);
+
         //register streams
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream2",7770);
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream3",7771);
@@ -45,7 +41,7 @@ public class Main {
         registerStream(sr,"http://streamreasoning.org/csparql/streams/stream5",7773);
 
         //register queries
-        registerQuery(sr, config, "rtgp-q2",".rspql");
+       registerQuery(sr, config, "rtgp-q2", ".rspql",wr);
         //registerQuery(sr, config, "rtgp-q1",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
         // registerQuery(sr, config, "rtgp-q2",".rspql");
@@ -73,15 +69,16 @@ public class Main {
         (new Thread(writer)).start();
     }
 
-    public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
+    public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix, PrintWriter wr) throws IOException, ConfigurationException {
         ContinuousQueryExecution cqe;
         cqe = sr.register(getQuery(queryName, suffix), config);
-        cqe.add(new StreamOutputFormatter("TURTLE", true));
+        cqe.add(new StreamOutputFormatter("TURTLE", true,wr));
     }
 
-    public static void createTCPClient(WebStream ws, String host, int port) throws IOException {
-        TcpClientSocketStream s = new TcpClientSocketStream(ws, host,port);
-        (new Thread(s)).start();
-    }
 
+    public static PrintWriter createTcpClient(String host, int port) throws IOException {
+        Socket cs = new Socket(host,port);
+        PrintWriter writer = new PrintWriter(cs.getOutputStream(),true);
+        return writer;
+    }
 }

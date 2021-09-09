@@ -18,15 +18,13 @@ import java.net.Socket;
 public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
     protected PrintWriter writer;
 
-    public StreamOutputFormatter(String format, boolean distinct) throws IOException {
+    public StreamOutputFormatter(String format, boolean distinct, PrintWriter wr) throws IOException {
 
         super(format, distinct);
-        Socket cs = new Socket("localhost",8880);
-        writer = new PrintWriter(cs.getOutputStream(),true);
+        writer = wr;
+
     }
 
-    @SneakyThrows
-    @Override
     protected void out(String s) {
         writer.println(s);
     }
