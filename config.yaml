@@ -1,0 +1,9 @@
+iStreams:
+  - 7770 #apache
+  - 7771 #auth
+
+oStream: localhost:8880 #host:port
+
+queryDir: queries/
+
+csparqlConf: csparql.properties

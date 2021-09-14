@@ -7,58 +7,54 @@ import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import org.apache.jena.query.ARQ;
+import org.yaml.snakeyaml.constructor.Constructor;
 import sepses.streamVKG.stream.StreamOutputFormatter;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.jena.graph.Graph;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.yaml.snakeyaml.Yaml;
+
+import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Kabul on 24/07/2021.
  */
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
+    public static <Int> void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
+        //get configuration
+        Map<String, Object> s = readYamlFile("config.yaml");
+        ArrayList<Integer> is= (ArrayList<Integer>) s.get("iStreams");
+        String[] os = s.get("oStream").toString().split(":");
+        System.out.println(os[1]);
+        String queryDir = s.get("queryDir").toString();
+        ArrayList<String> queryFiles = listFilesForFolder(new File(queryDir));
+        String csparqlConf = s.get("csparqlConf").toString();
+        //get query dir
+        System.out.println(queryFiles);
+        System.exit(0);
+
+
         ARQ.init();
-        EngineConfiguration ec = new EngineConfiguration("csparql.properties");
-        SDSConfiguration config = new SDSConfiguration("csparql.properties");
-
-        PrintWriter wr = createTcpClient("localhost",8880);
-        //init tcp server
-        TcpSocketStream wr1 = createTcpServer("http://streamreasoning.org/csparql/streams/stream2",7770);
-        TcpSocketStream wr2 = createTcpServer("http://streamreasoning.org/csparql/streams/stream3",7771);
-        TcpSocketStream wr3 = createTcpServer("http://streamreasoning.org/csparql/streams/stream4",7772);
-        TcpSocketStream wr4 = createTcpServer("http://streamreasoning.org/csparql/streams/stream5",7773);
-
+        EngineConfiguration ec = new EngineConfiguration(csparqlConf);
+        SDSConfiguration config = new SDSConfiguration(csparqlConf);
+        PrintWriter wr = createTcpClient(os[0], Integer.parseInt(os[1]));
 
         //init engine for Query1
         CSPARQLEngine sr = new CSPARQLEngine(0, ec);
 
-        //register streams
-        registerStream(sr,wr1);
-        registerStream(sr,wr2);
-        registerStream(sr,wr3);
-        registerStream(sr,wr4);
-
-        //register queries
-       registerQuery(sr, config, "rtgp-q2", ".rspql",wr);
-
-        //init engine for Query2
-        CSPARQLEngine sr2 = new CSPARQLEngine(0, ec);
-
-        //register streams2
-        registerStream(sr2,wr1);
-        registerStream(sr2,wr2);
-        registerStream(sr2,wr3);
-        registerStream(sr2,wr4);
-
-        //register queries2
-        registerQuery(sr2, config, "rtgp-q1", ".rspql",wr);
+        for (int i=0; i<is.size();i++){
+            registerStream(sr, createTcpServer("http://example.org/stream"+i,is.get(i)));
+        }
+        for (int k=0;k<queryFiles.size();k++){
+            registerQuery(sr, config,queryFiles.get(k), ".rspql",wr);
+        }
 
 
 
@@ -88,8 +84,46 @@ public class Main {
     }
 
     public static TcpSocketStream createTcpServer(String stream, int port){
-        TcpSocketStream writer = new TcpSocketStream("Writer", stream, port);
+        TcpSocketStream writer = new TcpSocketStream(stream, port);
         (new Thread(writer)).start();
         return writer;
     }
+
+    public static Map<String, Object> readYamlFile(String file) throws FileNotFoundException{
+        InputStream input = readFile(file);
+
+        Yaml yaml = new Yaml();
+
+        Map<String, Object> yamlContent = yaml.load(input);
+
+
+        return yamlContent;
+
+    }
+
+    protected static InputStream readFile(String file) throws FileNotFoundException {
+        final File initialFile = new File(file);
+        //System.out.print(initialFile);
+        final InputStream input = new FileInputStream(initialFile);
+        return input;
+
+    }
+
+
+    public static ArrayList<String> listFilesForFolder(final File folder) {
+        ArrayList<String> rulefiles = new ArrayList<String>();
+
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                rulefiles.add(fileEntry.getName().replaceAll(".rspql",""));
+                // System.out.println(fileEntry.getName());
+            }
+        }
+
+        return rulefiles;
+    }
+
 }
+

@@ -16,9 +16,8 @@ public class TcpSocketStream extends DataStreamImpl implements Runnable  {
     private DataStreamImpl<Graph> s;
     private String type;
     private int port;
-    public TcpSocketStream(String name, String stream_uri, int p) {
+    public TcpSocketStream(String stream_uri, int p) {
         super(stream_uri);
-        this.type = name;
         this.port = p;
 
     }
