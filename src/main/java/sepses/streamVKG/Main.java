@@ -2,12 +2,13 @@ package sepses.streamVKG;
 
 
 import it.polimi.sr.rsp.csparql.engine.CSPARQLEngine;
+import it.polimi.sr.rsp.csparql.sysout.ConstructSysOutDefaultFormatter;
 import it.polimi.yasper.core.engine.config.EngineConfiguration;
+import it.polimi.yasper.core.querying.ContinuousQuery;
 import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import org.apache.jena.query.ARQ;
-import org.yaml.snakeyaml.constructor.Constructor;
 import sepses.streamVKG.stream.StreamOutputFormatter;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
@@ -19,7 +20,6 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +32,7 @@ public class Main {
         Map<String, Object> s = readYamlFile("config.yaml");
         ArrayList<Integer> is= (ArrayList<Integer>) s.get("iStreams");
         String[] os = s.get("oStream").toString().split(":");
-        //System.out.println(os[1]);
+        System.out.println(is.get(1));
         String queryDir = s.get("queryDir").toString();
         ArrayList<String> queryFiles = listFilesForFolder(new File(queryDir));
         String csparqlConf = s.get("csparqlConf").toString();
@@ -47,13 +47,18 @@ public class Main {
         //init engine for Query1
         CSPARQLEngine sr = new CSPARQLEngine(0, ec);
 
+
+
         for (int i=0; i<is.size();i++){
-            //System.out.println(is.get(i));
-            registerStream(sr, createTcpServer("http://streamreasoning.org/csparql/streams/stream"+i+2,is.get(i)));
+
+            registerStream(sr,createTcpServer("http://streamreasoning.org/csparql/streams/stream"+i,is.get(i)));
         }
+
+
+
        for (int k=0;k<queryFiles.size();k++){
-            //System.out.println(queryDir+queryFiles.get(k));
-            registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
+             registerQuery(sr, config, queryDir+queryFiles.get(0), ".rspql",wr);
+
        }
 
 
@@ -123,6 +128,15 @@ public class Main {
         }
 
         return rulefiles;
+    }
+
+    public static void registerQuery2(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
+        ContinuousQuery q;
+        ContinuousQueryExecution cqe;
+        cqe = sr.register(getQuery(queryName, suffix), config);
+        cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
+
+
     }
 
 }
