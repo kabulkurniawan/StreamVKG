@@ -32,7 +32,7 @@ public class Main {
         Map<String, Object> s = readYamlFile("config.yaml");
         ArrayList<Integer> is= (ArrayList<Integer>) s.get("iStreams");
         String[] os = s.get("oStream").toString().split(":");
-        System.out.println(os[1]);
+        //System.out.println(os[1]);
         String queryDir = s.get("queryDir").toString();
         ArrayList<String> queryFiles = listFilesForFolder(new File(queryDir));
         String csparqlConf = s.get("csparqlConf").toString();
@@ -49,12 +49,12 @@ public class Main {
 
         for (int i=0; i<is.size();i++){
             //System.out.println(is.get(i));
-            registerStream(sr, createTcpServer("http://example.org/stream"+i,is.get(i)));
+            registerStream(sr, createTcpServer("http://streamreasoning.org/csparql/streams/stream"+i,is.get(i)));
         }
-       // for (int k=0;k<queryFiles.size();k++){
+       for (int k=0;k<queryFiles.size();k++){
             //System.out.println(queryDir+queryFiles.get(k));
-            registerQuery(sr, config, queryDir+queryFiles.get(0), ".rspql",wr);
-      //  }
+            registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
+       }
 
 
 
