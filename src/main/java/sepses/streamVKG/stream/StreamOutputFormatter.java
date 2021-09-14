@@ -18,7 +18,7 @@ import java.net.Socket;
  */
 @Log4j
 
-public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
+public class StreamOutputFormatter extends ConstructResponseSimpleFormatter {
     protected PrintWriter writer;
 
     public StreamOutputFormatter(String format, boolean distinct, PrintWriter wr) throws IOException {
@@ -30,7 +30,6 @@ public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
 
     @SneakyThrows
     protected void out(String s) {
-        System.out.println("output: =>"+s);
         writer.println(s);
     }
 }
