@@ -37,8 +37,8 @@ public class Main {
         ArrayList<String> queryFiles = listFilesForFolder(new File(queryDir));
         String csparqlConf = s.get("csparqlConf").toString();
         //get query dir
-        System.out.println(queryFiles);
-        System.exit(0);
+//        System.out.println(queryFiles);
+//        System.exit(0);
 
 
         ARQ.init();
