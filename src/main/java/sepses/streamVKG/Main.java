@@ -53,7 +53,7 @@ public class Main {
             registerStream(sr, createTcpServer("http://example.org/stream"+i,is.get(i)));
         }
         for (int k=0;k<queryFiles.size();k++){
-            registerQuery(sr, config,queryFiles.get(k), ".rspql",wr);
+            registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
         }
 
 
