@@ -36,9 +36,7 @@ public class Main {
         String queryDir = s.get("queryDir").toString();
         ArrayList<String> queryFiles = listFilesForFolder(new File(queryDir));
         String csparqlConf = s.get("csparqlConf").toString();
-        //get query dir
-//        System.out.println(queryFiles);
-//        System.exit(0);
+
 
 
         ARQ.init();
@@ -50,9 +48,12 @@ public class Main {
         CSPARQLEngine sr = new CSPARQLEngine(0, ec);
 
         for (int i=0; i<is.size();i++){
+            //System.out.println(is.get(i));
             registerStream(sr, createTcpServer("http://example.org/stream"+i,is.get(i)));
         }
         for (int k=0;k<queryFiles.size();k++){
+            //System.out.println(queryDir+queryFiles.get(k));
+
             registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
         }
 
