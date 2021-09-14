@@ -7,7 +7,6 @@ import lombok.extern.log4j.Log4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.Property;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -31,14 +30,7 @@ public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
 
     @SneakyThrows
     protected void out(String s) {
-        Model model = ModelFactory.createDefaultModel()
-                .read(IOUtils.toInputStream(s, "UTF-8"), null, "TURTLE");
-        Property p1 = model.createProperty("http://streamreasoning.org/csparql/eventTime");
-        Property p2 = model.createProperty("http://streamreasoning.org/csparql/processingTime");
-        model.remove(null,p1,null);
-        model.remove(null,p2,null);
-        String s2 = model.write(System.out,"TURTLE").toString();
-        writer.println(s2);
-        model.close();
+        System.out.println("output: =>"+s);
+        writer.println(s);
     }
 }
