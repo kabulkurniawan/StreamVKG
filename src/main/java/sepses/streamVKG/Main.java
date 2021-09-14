@@ -49,7 +49,7 @@ public class Main {
 
         for (int i=0; i<is.size();i++){
             //System.out.println(is.get(i));
-            registerStream(sr, createTcpServer("http://streamreasoning.org/csparql/streams/stream"+i+2,is.get(i)));
+            registerStream(sr, createTcpServer("http://example.org/stream"+i+1,is.get(i)));
         }
        for (int k=0;k<queryFiles.size();k++){
             //System.out.println(queryDir+queryFiles.get(k));
