@@ -57,7 +57,7 @@ public class Main {
 
 
        for (int k=0;k<queryFiles.size();k++){
-             registerQuery(sr, config, queryDir+queryFiles.get(0), ".rspql",wr);
+             registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
 
        }
 
