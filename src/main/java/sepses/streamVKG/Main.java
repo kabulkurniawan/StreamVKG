@@ -51,10 +51,10 @@ public class Main {
             //System.out.println(is.get(i));
             registerStream(sr, createTcpServer("http://example.org/stream"+i,is.get(i)));
         }
-        for (int k=0;k<queryFiles.size();k++){
+       // for (int k=0;k<queryFiles.size();k++){
             //System.out.println(queryDir+queryFiles.get(k));
-            registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
-        }
+            registerQuery(sr, config, queryDir+queryFiles.get(0), ".rspql",wr);
+      //  }
 
 
 
