@@ -37,7 +37,8 @@ public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
         Property p2 = model.createProperty("http://streamreasoning.org/csparql/processingTime");
         model.remove(null,p1,null);
         model.remove(null,p2,null);
-        writer.println(model.write(System.out,"TURTLE"));
+        String s2 = model.write(System.out,"TURTLE").toString();
+        writer.println(s2);
         model.close();
     }
 }
