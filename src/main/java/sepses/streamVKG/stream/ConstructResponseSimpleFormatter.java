@@ -6,6 +6,7 @@ import org.apache.jena.graph.Graph;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.ResourceFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Observable;
@@ -30,10 +31,13 @@ public abstract class ConstructResponseSimpleFormatter extends QueryResultFormat
 
     public void format(Graph sr) {
         Model modelForGraph = ModelFactory.createModelForGraph(sr);
-        Property p1 = modelForGraph.createProperty("http://streamreasoning.org/csparql/eventTime");
-        Property p2 = modelForGraph.createProperty("http://streamreasoning.org/csparql/processingTime");
-        //modelForGraph.remove(null,p1,null);
-        //modelForGraph.remove(null,p2,null);
+        Property p1=
+                ResourceFactory.createProperty("http://streamreasoning.org/csparql/processingTime");
+        Property p2=
+                ResourceFactory.createProperty("http://streamreasoning.org/csparql/eventTime");
+
+        modelForGraph.remove(null,p1,null);
+        modelForGraph.remove(null,p2,null);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         modelForGraph.write(outputStream, format);
