@@ -32,12 +32,12 @@ public class StreamOutputFormatter extends ConstructResponseDefaultFormatter {
     @SneakyThrows
     protected void out(String s) {
         Model model = ModelFactory.createDefaultModel()
-                .read(IOUtils.toInputStream(s, "UTF-8"), null, "N-TRIPLES");
+                .read(IOUtils.toInputStream(s, "UTF-8"), null, "TURTLE");
         Property p1 = model.createProperty("http://streamreasoning.org/csparql/eventTime");
         Property p2 = model.createProperty("http://streamreasoning.org/csparql/processingTime");
         model.remove(null,p1,null);
         model.remove(null,p2,null);
-        writer.println(model.write(System.out));
+        writer.println(model.write(System.out,"TURTLE"));
         model.close();
     }
 }
