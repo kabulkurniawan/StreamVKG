@@ -10,7 +10,7 @@ REGISTER RSTREAM <s1> AS
 CONSTRUCT { ?s cl:timetamp ?timestamp }
 #SELECT  (count(?s) as ?countLog)
 #FROM <http://localhost:8082/dbpedia-example.ttl>
-FROM NAMED WINDOW <win2> ON <stream0> [RANGE PT2S STEP PT1S]
+FROM NAMED WINDOW <win2> ON <stream2> [RANGE PT2S STEP PT1S]
 WHERE  {
    #?lf  rdfs:label  ?labl.
     WINDOW ?w  {
