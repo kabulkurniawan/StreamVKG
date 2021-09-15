@@ -1,16 +1,10 @@
 package sepses.streamVKG.stream;
 
-import it.polimi.sr.rsp.csparql.sysout.ConstructResponseDefaultFormatter;
-
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
-import org.apache.commons.io.IOUtils;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.Socket;
 
 
 /**

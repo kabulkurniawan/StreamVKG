@@ -9,6 +9,7 @@ import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
 import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import org.apache.jena.query.ARQ;
+import sepses.streamVKG.stream.QueryRegister;
 import sepses.streamVKG.stream.StreamOutputFormatter;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
@@ -44,7 +45,6 @@ public class Main {
         SDSConfiguration config = new SDSConfiguration(csparqlConf);
         PrintWriter wr = createTcpClient(os[0], Integer.parseInt(os[1]));
 
-        //init engine for Query1
 
 
         //create TCP Server
@@ -54,37 +54,15 @@ public class Main {
             arrWrs.add(wrs);
         }
 
-
-
-
+        //create engine per query
 
        for (int k=0;k<queryFiles.size();k++){
-           CSPARQLEngine sr = new CSPARQLEngine(0, ec);
-           for(int n=0;n<arrWrs.size();n++){
-               registerStream(sr,arrWrs.get(n));
-           }
-             registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
-
+           QueryRegister qr = new QueryRegister(arrWrs, ec, config, queryDir + queryFiles.get(k), ".rspql", wr);
+           (new Thread(qr)).start();
        }
 
 
 
-    }
-
-    public static String getQuery(String queryName, String suffix) throws IOException {
-        File file = new File(queryName + suffix);
-        return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
-    }
-
-    public static void registerStream(CSPARQLEngine sr, TcpSocketStream writer){
-        DataStreamImpl<Graph> register;
-        register = sr.register(writer);
-        writer.setWritable(register);
-    }
-
-    public static void registerQuery(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix, PrintWriter wr) throws IOException, ConfigurationException {
-        ContinuousQueryExecution cqe = sr.register(getQuery(queryName, suffix), config);
-        cqe.add(new StreamOutputFormatter("TURTLE", true,wr));
     }
 
 
@@ -136,14 +114,7 @@ public class Main {
         return rulefiles;
     }
 
-    public static void registerQuery2(CSPARQLEngine sr, SDSConfiguration config, String queryName, String suffix) throws IOException, ConfigurationException {
-        ContinuousQuery q;
-        ContinuousQueryExecution cqe;
-        cqe = sr.register(getQuery(queryName, suffix), config);
-        cqe.add(new ConstructSysOutDefaultFormatter("TURTLE", true));
 
-
-    }
 
 }
 

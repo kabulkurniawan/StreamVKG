@@ -2,14 +2,9 @@ package sepses.streamVKG.stream;
 
 import it.polimi.yasper.core.stream.web.WebStream;
 import lombok.SneakyThrows;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.net.HttpURLConnection;
 import java.net.Socket;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 public class TcpClientSocketStream  implements Runnable  {
     private WebStream input;
