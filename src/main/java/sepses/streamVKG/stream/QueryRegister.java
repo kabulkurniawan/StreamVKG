@@ -38,7 +38,7 @@ public class QueryRegister  implements Runnable  {
             }
 
             ContinuousQueryExecution cqe = sr.register(getQuery(queryName), config);
-            cqe.add(new StreamOutputFormatter("N3", true,wr));
+            cqe.add(new StreamOutputFormatter("TRIPLE", true,wr));
         } catch (Exception e) {
             e.printStackTrace();
         }
