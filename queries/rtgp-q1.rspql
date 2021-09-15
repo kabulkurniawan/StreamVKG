@@ -7,11 +7,11 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 REGISTER RSTREAM <s1> AS
-CONSTRUCT { ?s apa:hasRequest ?req }
+CONSTRUCT { ?s apa:hasClient ?client }
 #FROM <http://localhost:8082/dbpedia-example.ttl>
 FROM NAMED WINDOW <win2> ON <stream0> [RANGE PT2S STEP PT1S]
 WHERE  {
     WINDOW ?w  {
-     ?s   apa:hasRequest   ?req.
+     ?s   apa:hasClient   ?client.
      }
   }
