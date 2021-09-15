@@ -14,5 +14,6 @@ WHERE  {
    WINDOW ?w  {
      ?s   apa:hasResponse   ?res.
      }
+     FILTER regex(str(?res),"400")
   }
 #ORDER BY ASC(?s)
