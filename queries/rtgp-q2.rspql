@@ -7,16 +7,12 @@ PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 REGISTER RSTREAM <s1> AS
-CONSTRUCT { ?s cl:timetamp ?timestamp }
-#SELECT  (count(?s) as ?countLog)
+CONSTRUCT { ?s apa:hasResponse ?res }
 #FROM <http://localhost:8082/dbpedia-example.ttl>
 FROM NAMED WINDOW <win2> ON <stream0> [RANGE PT2S STEP PT1S]
 WHERE  {
-   #?lf  rdfs:label  ?labl.
-    WINDOW ?w  {
-    # ?s   cl:message   ?message.
-     ?s   cl:timestamp   ?timestamp.
-        # ?s   cl:hasLogFamily ?lf.
-        }
+   WINDOW ?w  {
+     ?s   apa:hasResponse   ?res.
+     }
   }
 #ORDER BY ASC(?s)
