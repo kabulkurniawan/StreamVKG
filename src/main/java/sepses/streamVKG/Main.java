@@ -45,7 +45,7 @@ public class Main {
 
         //create engine per query
        for (int k=0;k<queryFiles.size();k++){
-           QueryRegister qr = new QueryRegister(arrWrs, ec, config, queryDir + queryFiles.get(k), ".rspql", wr);
+           QueryRegister qr = new QueryRegister(arrWrs, ec, config, queryDir + queryFiles.get(k), wr);
            (new Thread(qr)).start();
        }
 
@@ -75,7 +75,6 @@ public class Main {
 
     protected static InputStream readFile(String file) throws FileNotFoundException {
         final File initialFile = new File(file);
-        //System.out.print(initialFile);
         final InputStream input = new FileInputStream(initialFile);
         return input;
 
@@ -88,7 +87,7 @@ public class Main {
             if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry);
             } else {
-                rulefiles.add(fileEntry.getName().replaceAll(".rspql",""));
+                rulefiles.add(fileEntry.getName());
             }
         }
         return rulefiles;

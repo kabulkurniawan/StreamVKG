@@ -18,15 +18,13 @@ public class QueryRegister  implements Runnable  {
     private CSPARQLEngine sr;
     private SDSConfiguration config;
     private String queryName;
-    private String suffix;
     private PrintWriter wr;
     private ArrayList<TcpSocketStream> arrWrs;
 
-    public QueryRegister(ArrayList<TcpSocketStream> wrs, EngineConfiguration ec, SDSConfiguration cf, String qn, String sf, PrintWriter w) {
+    public QueryRegister(ArrayList<TcpSocketStream> wrs, EngineConfiguration ec, SDSConfiguration cf, String qn, PrintWriter w) {
          sr = new CSPARQLEngine(0, ec);
          config = cf;
          queryName = qn;
-         suffix = sf;
          wr = w;
          arrWrs = wrs;
     }
@@ -39,7 +37,7 @@ public class QueryRegister  implements Runnable  {
                 registerStream(sr,arrWrs.get(n));
             }
 
-            ContinuousQueryExecution cqe = sr.register(getQuery(queryName, suffix), config);
+            ContinuousQueryExecution cqe = sr.register(getQuery(queryName), config);
             cqe.add(new StreamOutputFormatter("TURTLE", true,wr));
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,10 +45,11 @@ public class QueryRegister  implements Runnable  {
     }
 
 
-    public static String getQuery(String queryName, String suffix) throws IOException {
-        File file = new File(queryName + suffix);
+    public static String getQuery(String queryName) throws IOException {
+        File file = new File(queryName);
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8).replace("\r","");
     }
+
     public static void registerStream(CSPARQLEngine sr, TcpSocketStream writer){
         DataStreamImpl<Graph> register;
         register = sr.register(writer);
