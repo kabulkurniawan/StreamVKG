@@ -24,6 +24,6 @@ public class StreamOutputFormatter extends ConstructResponseSimpleFormatter {
 
     @SneakyThrows
     protected void out(String s) {
-        writer.println(s+"\\n");
+        writer.println(s);
     }
 }
