@@ -1,25 +1,15 @@
 package sepses.streamVKG;
 
 
-import it.polimi.sr.rsp.csparql.engine.CSPARQLEngine;
-import it.polimi.sr.rsp.csparql.sysout.ConstructSysOutDefaultFormatter;
 import it.polimi.yasper.core.engine.config.EngineConfiguration;
-import it.polimi.yasper.core.querying.ContinuousQuery;
-import it.polimi.yasper.core.querying.ContinuousQueryExecution;
 import it.polimi.yasper.core.sds.SDSConfiguration;
-import it.polimi.yasper.core.stream.data.DataStreamImpl;
 import org.apache.jena.query.ARQ;
 import sepses.streamVKG.stream.QueryRegister;
-import sepses.streamVKG.stream.StreamOutputFormatter;
 import sepses.streamVKG.stream.TcpSocketStream;
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.io.FileUtils;
-import org.apache.jena.graph.Graph;
 import org.yaml.snakeyaml.Yaml;
-
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -29,7 +19,7 @@ import java.util.Map;
 public class Main {
 
     public static <Int> void main(String[] args) throws InterruptedException, IOException, ConfigurationException {
-        //get configuration
+        //get configuration file
         Map<String, Object> s = readYamlFile("config.yaml");
         ArrayList<Integer> is= (ArrayList<Integer>) s.get("iStreams");
         String[] os = s.get("oStream").toString().split(":");
@@ -39,7 +29,7 @@ public class Main {
         String csparqlConf = s.get("csparqlConf").toString();
 
 
-
+        //init configuration
         ARQ.init();
         EngineConfiguration ec = new EngineConfiguration(csparqlConf);
         SDSConfiguration config = new SDSConfiguration(csparqlConf);
@@ -55,7 +45,6 @@ public class Main {
         }
 
         //create engine per query
-
        for (int k=0;k<queryFiles.size();k++){
            QueryRegister qr = new QueryRegister(arrWrs, ec, config, queryDir + queryFiles.get(k), ".rspql", wr);
            (new Thread(qr)).start();
@@ -80,14 +69,9 @@ public class Main {
 
     public static Map<String, Object> readYamlFile(String file) throws FileNotFoundException{
         InputStream input = readFile(file);
-
         Yaml yaml = new Yaml();
-
         Map<String, Object> yamlContent = yaml.load(input);
-
-
         return yamlContent;
-
     }
 
     protected static InputStream readFile(String file) throws FileNotFoundException {
@@ -101,16 +85,13 @@ public class Main {
 
     public static ArrayList<String> listFilesForFolder(final File folder) {
         ArrayList<String> rulefiles = new ArrayList<String>();
-
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry);
             } else {
                 rulefiles.add(fileEntry.getName().replaceAll(".rspql",""));
-                // System.out.println(fileEntry.getName());
             }
         }
-
         return rulefiles;
     }
 
