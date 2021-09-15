@@ -45,18 +45,24 @@ public class Main {
         PrintWriter wr = createTcpClient(os[0], Integer.parseInt(os[1]));
 
         //init engine for Query1
-        CSPARQLEngine sr = new CSPARQLEngine(0, ec);
 
 
-
-        for (int i=0; i<is.size();i++){
-
-            registerStream(sr,createTcpServer("http://streamreasoning.org/csparql/streams/stream"+i,is.get(i)));
+        //create TCP Server
+        ArrayList<TcpSocketStream> arrWrs = new ArrayList<TcpSocketStream>();
+        for (int i=0; i<is.size();i++) {
+           TcpSocketStream wrs = createTcpServer("http://streamreasoning.org/csparql/streams/stream"+i,is.get(i));
+            arrWrs.add(wrs);
         }
 
 
 
+
+
        for (int k=0;k<queryFiles.size();k++){
+           CSPARQLEngine sr = new CSPARQLEngine(0, ec);
+           for(int n=0;n<arrWrs.size();n++){
+               registerStream(sr,arrWrs.get(n));
+           }
              registerQuery(sr, config, queryDir+queryFiles.get(k), ".rspql",wr);
 
        }
