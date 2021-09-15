@@ -36,8 +36,8 @@ public abstract class ConstructResponseSimpleFormatter extends QueryResultFormat
         Property p2=
                 ResourceFactory.createProperty("http://streamreasoning.org/csparql/eventTime");
 
-        modelForGraph.remove(null,p1,null);
-        modelForGraph.remove(null,p2,null);
+        modelForGraph.removeAll(null,p1,null);
+        modelForGraph.removeAll(null,p2,null);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         modelForGraph.write(outputStream, format);
