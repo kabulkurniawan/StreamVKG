@@ -23,7 +23,6 @@ public class Main {
         Map<String, Object> s = readYamlFile("config.yaml");
         ArrayList<Integer> is= (ArrayList<Integer>) s.get("iStreams");
         String[] os = s.get("oStream").toString().split(":");
-        System.out.println(is.get(1));
         String queryDir = s.get("queryDir").toString();
         ArrayList<String> queryFiles = listFilesForFolder(new File(queryDir));
         String csparqlConf = s.get("csparqlConf").toString();
