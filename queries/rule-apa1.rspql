@@ -16,14 +16,16 @@ CONSTRUCT {
 #FROM <http://localhost:8082/dbpedia-example.ttl>
 FROM NAMED WINDOW <win2> ON <stream0> [RANGE PT2S STEP PT1S]
 WHERE  {
-    WINDOW ?w  {
-    SELECT ?client (COUNT(?res) as ?r)
+
+  {  SELECT ?client (COUNT(?res) as ?r)
      WHERE {
+     WINDOW ?w  {
          ?s   apa:hasResponse   ?res.
          ?s   apa:hasClient   ?client.
          #?s   apa:hasAgent ?agent.
-        FILTER regex(str(?res),"400")
-      }
+        }
+       FILTER regex(str(?res),"400")
+       }
       GROUP BY ?client
      }
   }
