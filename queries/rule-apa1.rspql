@@ -8,17 +8,22 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 REGISTER RSTREAM <s1> AS
 CONSTRUCT {
-   ?s apa:hasResponse ?res.
-   ?s apa:hasClient ?client.
-   ?s apa:hasAgent ?agent.
+   #?s apa:hasResponse ?res.
+   #?s apa:hasClient ?client.
+   #?s apa:hasAgent ?agent.
+    ?client ?apa:failRespNumber ?r.
    }
 #FROM <http://localhost:8082/dbpedia-example.ttl>
 FROM NAMED WINDOW <win2> ON <stream0> [RANGE PT2S STEP PT1S]
 WHERE  {
     WINDOW ?w  {
-     ?s   apa:hasResponse   ?res.
-     ?s   apa:hasClient   ?client.
-     ?s   apa:hasAgent ?agent.
+    SELECT ?client (COUNT(?res)) as ?r)
+     WHERE {
+         ?s   apa:hasResponse   ?res.
+         ?s   apa:hasClient   ?client.
+         #?s   apa:hasAgent ?agent.
+        FILTER regex(str(?res),"400")
+      }
+      GROUP BY ?client
      }
-     FILTER regex(str(?res),"400")
   }
