@@ -17,7 +17,7 @@ CONSTRUCT {
 FROM NAMED WINDOW <win2> ON <stream0> [RANGE PT2S STEP PT1S]
 WHERE  {
     WINDOW ?w  {
-    SELECT ?client (COUNT(?res)) as ?r)
+    SELECT ?client (COUNT(?res) as ?r)
      WHERE {
          ?s   apa:hasResponse   ?res.
          ?s   apa:hasClient   ?client.
