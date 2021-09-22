@@ -11,7 +11,7 @@ CONSTRUCT {
    #?s apa:hasResponse ?res.
    #?s apa:hasClient ?client.
    #?s apa:hasAgent ?agent.
-    ?client ?apa:failRespNumber ?r.
+    ?client apa:failRespNumber ?r.
    }
 #FROM <http://localhost:8082/dbpedia-example.ttl>
 FROM NAMED WINDOW <win2> ON <stream0> [RANGE PT2S STEP PT1S]
