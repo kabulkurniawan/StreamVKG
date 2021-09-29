@@ -8,7 +8,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
 REGISTER RSTREAM <s1> AS
 CONSTRUCT {
-     #?s apa:hasResponse ?res.
+    #?s apa:hasResponse ?res.
      #?s apa:hasClient ?client.
      #?s apa:hasAgent ?agent.
      ?client apa:failRespNumber ?r.
